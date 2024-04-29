@@ -1,0 +1,103 @@
+/* Import Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600&display=swap");
+
+/* Pengaturan umum */
+body {
+    font-family: 'Source Sans Pro', sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow-y: scroll;
+    background-color: #f0f0f0;
+}
+
+/* App layout */
+.app {
+    display: flex;
+    height: 100vh;
+}
+
+/* Sidebar styling */
+.sidebar {
+    width: 250px;
+    background-color: #1f2933;
+    color: white;
+    overflow-y: auto;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    transition: width 0.3s ease;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-header {
+    padding: 10px;
+    background-color: #09f;
+    text-align: center;
+    font-weight: bold;
+}
+
+.sidebar-nav ul,
+.sidebar-nav details {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-nav ul li,
+.sidebar-nav details {
+    padding: 10px;
+    border-bottom: 1px solid #444;
+}
+
+.sidebar-nav details summary {
+    cursor: pointer;
+    padding: 10px;
+    color: #f0f0f0;
+}
+
+summary::marker {
+    display: none; /* Menghapus tanda default */
+}
+
+details ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+details ul li {
+    padding: 10px;
+    transition: background-color 0.3s;
+}
+
+details ul li a {
+    display: block;
+    color: #f0f0f0;
+}
+
+details ul li:hover {
+    background-color: #30415a;
+}
+
+/* Konten utama */
+#main-content {
+    flex-grow: 1;
+    padding: 20px;
+    margin-left: 250px;
+    overflow-y: auto;
+}
+
+.jumbotron {
+    padding: 20px;
+    background-color: white;
+    border: 1px solid #e9ecef;
+    border-radius: 0.3rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+img.img-fluid {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.3rem;
+}

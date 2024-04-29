@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi dengan Sidebar</title>
+    <!-- Mengaitkan file CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- Import font dari Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Mengaitkan pustaka ikon Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const uploadForm = document.getElementById('uploadForm');
+        uploadForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const formData = new FormData(uploadForm);
+            fetch("{{ url_for('upload') }}", {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('uploadedImage').src = "{{ url_for('static', filename='') }}" + data.file_path;
+                    document.getElementById('processedImage').src = "";  // Clear processed image if any
+                } else {
+                    alert('Failed to upload');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+
+        document.querySelectorAll('.process-btn').forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.preventDefault();
+                fetch(button.getAttribute('href'), {
+                    method: 'POST'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Append timestamp to the source URL to prevent caching
+                        const newSrc = `{{ url_for('static', filename='img/after.jpg') }}?${new Date().getTime()}`;
+                        document.getElementById('processedImage').src = newSrc;
+                    } else {
+                        alert('Failed to process image: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            });
+        });
+    });
+</script>
+  
+    </script>
+        
+        
+</head>
+
+<body>
+    <section class="app">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <header class="sidebar-header">
+                <i class="fas fa-bars"></i> Menu
+            </header>
+            <nav class="sidebar-nav">
+                <!-- Umum Section -->
+                <details close>
+                    <summary><i class=""></i> Umum</summary>
+                    <ul>
+                        <li><a href="{{ url_for('normal') }}" class="process-btn"><i class="fas fa-adjust"></i> Normal</a></li>
+                        <li><a href="{{ url_for('grayscale') }}" class="process-btn"><i class="fas fa-adjust"></i> Grayscale</a></li>
+                        <li><a href="{{ url_for('zoomin') }}" class="process-btn"><i class="fas fa-search-plus"></i> Zoom In</a></li>
+                        <li><a href="{{ url_for('zoomout') }} "  class="process-btn"><i class="fas fa-search-minus"></i> Zoom Out</a></li>
+                    </ul>
+                </details>
+
+                <details close >
+                    <summary><i class=""></i> Pergeseran</summary>
+                    <ul>
+                        <li><a href="{{ url_for('move_left') }}" class="process-btn"><i class="fas fa-arrow-left"></i> Geser Kiri</a></li>
+                        <li><a href="{{ url_for('move_right') }}" class="process-btn"><i class="fas fa-arrow-right"></i> Geser Kanan</a></li>
+                        <li><a href="{{ url_for('move_up') }}" class="process-btn"><i class="fas fa-arrow-up"></i> Geser Atas</a></li>
+                        <li><a href="{{ url_for('move_down') }}" class="process-btn"><i class="fas fa-arrow-down"></i> Geser Bawah</a></li>
+                    </ul>
+                </details>
+
+                <details close >
+                    <summary><i class=""></i> Penerangan</summary>
+                    <ul>
+                        <li><a href="{{ url_for('brightness_multiplication') }}" class="process-btn"><i class="fas fa-sun"></i> Terang (*)</a></li>
+                        <li><a href="{{ url_for('brightness_division') }}" class="process-btn"><i class="fas fa-moon"></i> Gelap (*)</a></li>
+                        <li><a href="{{ url_for('brightness_addition') }}" class="process-btn"><i class="fas fa-lightbulb"></i> Terang (+)</a></li>
+                        <li><a href="{{ url_for('brightness_substraction') }}" class="process-btn"><i class="fas fa-lightbulb"></i> Gelap (-)</a></li>
+                    </ul>
+                </details>
+
+                <details close >
+                    <summary><i class=""></i> Analisis Gambar</summary>
+                    <ul>
+                        <li><a href="{{ url_for('histogram_rgb') }}"><i class="fas fa-chart-area"></i>
+                             histogram</a></li>
+                </details>
+
+                <details close >
+                    <summary><i class=""></i> Pemrosesan Gambar</summary>
+                    <ul>
+                        <li><a href="{{ url_for('histogram_equalizer') }}" class="process-btn"><i class="fas fa-chart-line"></i> histogram Equalizer</a></li>
+
+                </details>
+                
+                <!-- Lainnya -->
+                <details close>
+                    <summary><i class=""></i> Pemrosesan</summary>
+                    <ul>
+                        <li><a href="{{ url_for('edge_detection') }}" class="process-btn"><i class="fas fa-adjust"></i> Kontras</a></li>
+                        <li><a href="{{ url_for('blur') }}" class="process-btn"><i class="fas fa-water"></i> Blur</a></li>
+                        <li><a href="{{ url_for('sharpening') }}" class="process-btn"><i class="fas fa-cut"></i> Sharpening</a></li>
+                    </ul>
+                </details>
+                <!-- Tambahkan section lainnya di sini... -->
+
+                <details close>
+                    <summary><i class=""></i> Segmentation</summary>
+                    <ul>
+                        <li>
+                            <a href="{{ url_for('thresholding') }}" class="process-btn"><i class="fas fa-bolt"></i>Kontras</a>
+                            <form method="POST" enctype="multipart/form-data">
+                                <div class="form-row">
+                                    <div class="col">
+                                        <label for="lower_thres">Batas Bawah</label>
+                                        <input type="number" name="lower_thres" id="lower_thres" placeholder="0-255" class="form-control form-control-sm">
+                                    </div>
+                                    <div class="col">
+                                        <label for="upper_thres">Batas Atas</label>
+                                        <input type="number" name="upper_thres" id="upper_thres" placeholder="0-255" class="form-control form-control-sm">
+                                    </div>
+                                    <div class="col-12 mt-2">
+                                        <button type="submit" class="btn btn-primary">Thresholding</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </li>
+                        
+                        
+                      
+                    </ul>
+                </details>
+                
+            </nav>
+        </aside>
+
+        <!-- Konten Utama -->
+        <main id="main-content" class="content">
+            <div class="jumbotron jumbotron-fluid">
+                <div class="container text-center">
+                    <h1 class="display-4">Danendra Gafrila</h1>
+                    <p class="lead">Deskripsi yang lebih informatif.</p>
+                    <form id="uploadForm" action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data" class="form-inline justify-content-center">
+                        <div class="form-group mx-sm-3 mb-2">
+                            <label for="inputGroupFile04" class="sr-only">Pilih file</label>
+                            <input name="file" type="file" id="inputGroupFile04" class="form-control" accept="image/*" placeholder="Pilih file gambar">
+                        </div>
+                        <button type="submit" class="btn btn-success mb-2">Upload Gambar</button>
+                    </form>
+                    <img id="uploadedImage" class="img-fluid" src="" alt="Image will appear here after uploading">
+                </div>
+            </div>
+            <div class="row">
+                <!-- Kolom setengah halaman untuk jumbotron -->
+                <div class="col-md-8 offset-md-2">
+                    <div class="jumbotron">
+                        <h3>After</h3>
+                        <img id="processedImage" class="img-fluid" src="{{ url_for('static', filename='') }}" alt="Processed image will appear here">
+                    </div>
+                </div>
+            </div>
+            
+        </main>
+    </section>
+</body>
+
+</html>
