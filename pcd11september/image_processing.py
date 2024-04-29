@@ -16,7 +16,7 @@ def grayscale():
     new_arr = r.astype(int) + g.astype(int) + b.astype(int)
     new_arr = (new_arr/3).astype('uint8')
     new_img = Image.fromarray(new_arr)
-    new_img.save("static/img/after.jpg")
+    new_img.save("static/img/img_now.jpg")
 
 
 def is_grey_scale(img_path):
@@ -70,7 +70,7 @@ def zoomin():
 
     new_arr = new_arr.astype('uint8')
     new_img = Image.fromarray(new_arr)
-    new_img.save("static/img/after.jpg")
+    new_img.save("static/img/img_now.jpg")
 
 
 def zoomout():
@@ -92,7 +92,7 @@ def zoomout():
                 (g[0] + g[1] + g[2] + g[3]) / 4), int((b[0] + b[1] + b[2] + b[3]) / 4)))
     new_arr = np.uint8(new_arr)
     new_img = Image.fromarray(new_arr)
-    new_img.save("static/img/after.jpg")
+    new_img.save("static/img/img_now.jpg")
 
 
 def move_left():
@@ -104,7 +104,7 @@ def move_left():
     b = np.pad(b, ((0, 0), (0, 50)), 'constant')[:, 50:]
     new_arr = np.dstack((r, g, b))
     new_img = Image.fromarray(new_arr)
-    new_img.save("static/img/after.jpg")
+    new_img.save("static/img/image_now.jpg")
 
 
 def move_right():
@@ -116,7 +116,7 @@ def move_right():
     b = np.pad(b, ((0, 0), (50, 0)), 'constant')[:, :-50]
     new_arr = np.dstack((r, g, b))
     new_img = Image.fromarray(new_arr)
-    new_img.save("static/img/after.jpg")
+    new_img.save("static/img/img_now.jpg")
 
 
 def move_up():
@@ -128,7 +128,7 @@ def move_up():
     b = np.pad(b, ((0, 50), (0, 0)), 'constant')[50:, :]
     new_arr = np.dstack((r, g, b))
     new_img = Image.fromarray(new_arr)
-    new_img.save("static/img/img_now.jpg")
+    new_img.save("static/img/image_now.jpg")
 
 
 def move_down():
@@ -140,7 +140,7 @@ def move_down():
     b = np.pad(b, ((50, 0), (0, 0)), 'constant')[0:-50, :]
     new_arr = np.dstack((r, g, b))
     new_img = Image.fromarray(new_arr)
-    new_img.save("static/img/after.jpg")
+    new_img.save("static/img/img_now.jpg")
 
 
 def brightness_addition():
@@ -150,7 +150,7 @@ def brightness_addition():
     img_arr = np.clip(img_arr, 0, 255)
     new_arr = img_arr.astype('uint8')
     new_img = Image.fromarray(new_arr)
-    new_img.save("static/img/after.jpg")
+    new_img.save("static/img/img_now.jpg")
 
 
 def brightness_substraction():
@@ -160,7 +160,7 @@ def brightness_substraction():
     img_arr = np.clip(img_arr, 0, 255)
     new_arr = img_arr.astype('uint8')
     new_img = Image.fromarray(new_arr)
-    new_img.save("static/img/after.jpg")
+    new_img.save("static/img/img_now.jpg")
 
 
 def brightness_multiplication():
@@ -170,7 +170,7 @@ def brightness_multiplication():
     img_arr = np.clip(img_arr, 0, 255)
     new_arr = img_arr.astype('uint8')
     new_img = Image.fromarray(new_arr)
-    new_img.save("static/img/after.jpg")
+    new_img.save("static/img/img_now.jpg")
 
 
 def brightness_division():
@@ -180,7 +180,7 @@ def brightness_division():
     img_arr = np.clip(img_arr, 0, 255)
     new_arr = img_arr.astype('uint8')
     new_img = Image.fromarray(new_arr)
-    new_img.save("static/img/after.jpg")
+    new_img.save("static/img/img_now.jpg")
 
 
 def convolution(img, kernel):
@@ -215,7 +215,7 @@ def edge_detection():
     kernel = np.array([[-1, -1, -1], [-1, 8, -1], [-1, -1, -1]])
     new_arr = convolution(img_arr, kernel)
     new_img = Image.fromarray(new_arr)
-    new_img.save("static/img/after.jpg")
+    new_img.save("static/img/img_now.jpg")
 
 
 def blur():
@@ -225,7 +225,7 @@ def blur():
         [[0.0625, 0.125, 0.0625], [0.125, 0.25, 0.125], [0.0625, 0.125, 0.0625]])
     new_arr = convolution(img_arr, kernel)
     new_img = Image.fromarray(new_arr)
-    new_img.save("static/img/after.jpg")
+    new_img.save("static/img/img_now.jpg")
 
 
 def sharpening():
@@ -234,7 +234,7 @@ def sharpening():
     kernel = np.array([[0, -1, 0], [-1, 5, -1], [0, -1, 0]])
     new_arr = convolution(img_arr, kernel)
     new_img = Image.fromarray(new_arr)
-    new_img.save("static/img/after.jpg")
+    new_img.save("static/img/img_now.jpg")
 
 
 def histogram_rgb():
@@ -287,19 +287,19 @@ def histogram_equalizer():
     my_cdf = cdf(df(img))
     # use linear interpolation of cdf to find new pixel values. Scipy alternative exists
     image_equalized = np.interp(img, range(0, 256), my_cdf)
-    cv2.imwrite('static/img/after.jpg', image_equalized)
+    cv2.imwrite('static/img/img_now.jpg', image_equalized)
 
 
 def threshold(lower_thres, upper_thres):
-    img = Image.open("static/img/img_now.jpg")
-    img_arr = np.asarray(img)
-    condition = np.logical_and(np.greater_equal(img_arr, lower_thres),
-                               np.less_equal(img_arr, upper_thres))
-    print(lower_thres, upper_thres)
-    img_arr.setflags(write=1)
-    img_arr[condition] = 255
-    new_img = Image.fromarray(img_arr)
-    new_img.save("static/img/after.jpg")
+    # Baca gambar img_now.jpg menggunakan OpenCV
+    img = cv2.imread("static/img/img_now.jpg", cv2.IMREAD_GRAYSCALE)
+    
+    # Terapkan thresholding pada gambar menggunakan batas bawah dan batas atas
+    _, img_thresholded = cv2.threshold(img, lower_thres, upper_thres, cv2.THRESH_BINARY)
+    
+    # Ubah gambar yang telah di-threshold ke format PIL.Image untuk keperluan lainnya jika diperlukan
+    new_img = Image.fromarray(img_thresholded)
+    new_img.save("static/img/img_now.jpg")
 
 def dilasi():
     # Baca citra dalam skala GRAYSCALE
@@ -340,3 +340,71 @@ def erosi():
 
     # Simpan citra hasil dilasi
     new_img.save("static/img/img_now.jpg")
+
+
+def closing():
+    img = cv2.imread("static/img/img_now.jpg", cv2.IMREAD_GRAYSCALE)
+
+    # Konversi citra ke biner menggunakan threshold
+    _, binary_image = cv2.threshold(img, 70, 255, cv2.THRESH_BINARY)
+
+    # Definisikan ukuran kernel untuk dilasi
+    kernel_size = 3
+    kernel = np.ones((kernel_size, kernel_size), np.uint8)
+
+    dilasi_img = cv2.dilate(binary_image, kernel, iterations=1)
+
+    # Lakukan dilasi pada citra biner
+    closing_img = cv2.erode(dilasi_img, kernel, iterations=2)
+
+    # Konversi citra yang telah didilasi ke format PIL Image
+    new_img = Image.fromarray(closing_img)
+
+    # Simpan citra hasil dilasi
+    new_img.save("static/img/img_now.jpg")
+
+def opening():
+    img = cv2.imread("static/img/img_now.jpg", cv2.IMREAD_GRAYSCALE)
+
+    # Konversi citra ke biner menggunakan threshold
+    _, binary_image = cv2.threshold(img, 70, 255, cv2.THRESH_BINARY)
+
+    # Definisikan ukuran kernel untuk dilasi
+    kernel_size = 3
+    kernel = np.ones((kernel_size, kernel_size), np.uint8)
+
+    erosi_img = cv2.erode(binary_image, kernel, iterations=1)
+
+    # Lakukan dilasi pada citra biner
+    opening_img = cv2.dilate(erosi_img, kernel, iterations=2)
+
+    # Konversi citra yang telah didilasi ke format PIL Image
+    new_img = Image.fromarray(opening_img)
+
+    # Simpan citra hasil dilasi
+    new_img.save("static/img/img_now.jpg")
+
+def counting():
+    img = cv2.imread("static/img/img_now.jpg", cv2.IMREAD_GRAYSCALE)
+
+    _, binary_image = cv2.threshold(img, 70, 255, cv2.THRESH_BINARY)
+
+    kernel_size = 3
+    kernel = np.ones((kernel_size, kernel_size), np.uint8)
+
+    erosi_img = cv2.erode(binary_image, kernel, iterations=2)
+
+    contours, _ = cv2.findContours(erosi_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+    with_contours = img.copy()
+
+    with_contours = cv2.cvtColor(with_contours, cv2.COLOR_GRAY2RGB)
+    cv2.drawContours(with_contours, contours, -1, (0, 255, 0), 2)
+
+    # Count the number of blobs
+    num_blobs = len(contours)
+    print("Number of blobs detected:", num_blobs)
+
+    cv2.imwrite("static/img/img_now.jpg",with_contours)
+
+    return num_blobs

@@ -134,32 +134,49 @@
                     <summary><i class=""></i> Segmentation</summary>
                     <ul>
                         <li>
-                            <a href="{{ url_for('thresholding') }}" class="process-btn"><i class="fas fa-bolt"></i>Kontras</a>
-                            <form method="POST" enctype="multipart/form-data">
-                                <div class="form-row">
-                                    <div class="col">
-                                        <label for="lower_thres">Batas Bawah</label>
-                                        <input type="number" name="lower_thres" id="lower_thres" placeholder="0-255" class="form-control form-control-sm">
-                                    </div>
-                                    <div class="col">
-                                        <label for="upper_thres">Batas Atas</label>
-                                        <input type="number" name="upper_thres" id="upper_thres" placeholder="0-255" class="form-control form-control-sm">
-                                    </div>
-                                    <div class="col-12 mt-2">
-                                        <button type="submit" class="btn btn-primary">Thresholding</button>
-                                    </div>
-                                </div>
-                            </form>
+                            <i class="fas fa-bolt">Kontras</i>
+                            <form action="{{ url_for('thresholding') }}" method="POST"
+                            enctype="multipart/form-data">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Batas Bawah</th>
+                                        <th>Batas Atas</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><input type="number" name="lower_thres" class="form-control"
+                                                placeholder="0-255"></td>
+                                        <td><input type="number" name="upper_thres" class="form-control"
+                                                placeholder="0-255"></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"><button type="submit"
+                                                class="btn btn-primary btn-block">Thresholding</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </form>
                         </li>
                     </ul>
                 </details>
 
                 <details close >
-                    <summary><i class=""></i> QUIZ</summary>
+                    <summary><i class=""></i> Operasi Morfologi</summary>
                     <ul>
                         <li><a href="{{ url_for('dilasi') }}" class="process-btn"><i class="fas fa-sun"></i> Dilasi</a></li>
                         <li><a href="{{ url_for('erosi') }}" class="process-btn"><i class="fas fa-sun"></i> Erosi</a></li>
-            
+                        <li><a href="{{ url_for('closing') }}" class="process-btn"><i class="fas fa-sun"></i> Opening</a></li>
+                        <li><a href="{{ url_for('closing') }}" class="process-btn"><i class="fas fa-sun"></i> Closing</a></li>
+                    </ul>
+                </details>
+
+                <details close >
+                    <summary><i class=""></i> Counting</summary>
+                    <ul>
+                        <li><a href="{{ url_for('counting') }}" class="process-btn"><i class="fas fa-sun"></i> Counting</a></li>
+
                     </ul>
                 </details>
                 
@@ -179,7 +196,7 @@
                         </div>
                         <button type="submit" class="btn btn-success mb-2">Upload Gambar</button>
                     </form>
-                    <img id="uploadedImage" class="img-fluid" src="" alt="Image will appear here after uploading">
+                    <img id="uploadedImage" class="img-fluid" src="">
                 </div>
             </div>
             <div class="row">
@@ -187,13 +204,37 @@
                 <div class="col-md-8 offset-md-2">
                     <div class="jumbotron">
                         <h3>After</h3>
-                        <img id="processedImage" class="img-fluid" src="{{ url_for('static', filename='img/img_now.jpg') }}" alt="Processed image will appear here">
+                        <img id="processedImage" class="img-fluid" src="{{ url_for('static', filename='img/img_now.jpg') }}">
+                        <h2 id="jumlah_objek">Jumlah objek: -</h2>
                     </div>
                 </div>
             </div>
+            <script>
+                function fetchJumlahObjek() {
+                    // Panggil endpoint '/counting' menggunakan POST request
+                    fetch('/counting', {
+                        method: 'POST'
+                    })
+                    .then(response => response.json())  // Ambil respon sebagai JSON
+                    .then(data => {
+                        if (data.success) {
+                            // Perbarui elemen HTML dengan nilai jumlah_objek
+                            document.getElementById('jumlah_objek').innerText = `Jumlah objek: ${data.jumlah_objek}`;
+                        } else {
+                            console.error('Failed to fetch jumlah objek:', data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                }
             
+                // Panggil fungsi fetchJumlahObjek saat halaman dimuat
+                document.addEventListener('DOMContentLoaded', fetchJumlahObjek);
+                </script>
         </main>
     </section>
+    
 </body>
 
 </html>

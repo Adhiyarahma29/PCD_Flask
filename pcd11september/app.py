@@ -138,7 +138,7 @@ def move_right():
 def move_up():
     try:
         image_processing.move_up()
-        return jsonify(success=True, file_path="img/after.jpg")  # Mengembalikan JSON yang benar
+        return jsonify(success=True, file_path="img/image_now.jpg")  # Mengembalikan JSON yang benar
     except Exception as e:
         return jsonify(success=False, message=str(e)), 500
    
@@ -147,7 +147,7 @@ def move_up():
 def move_down():
     try:
         image_processing.move_down()
-        return jsonify(success=True, file_path="img/after.jpg")  # Mengembalikan JSON yang benar
+        return jsonify(success=True, file_path="img/image_now.jpg")  # Mengembalikan JSON yang benar
     except Exception as e:
         return jsonify(success=False, message=str(e)), 500
 
@@ -156,7 +156,7 @@ def move_down():
 def brightness_addition():
     try:
         image_processing.brightness_addition()
-        return jsonify(success=True, file_path="img/after.jpg")  # Mengembalikan JSON yang benar
+        return jsonify(success=True, file_path="img/image_now.jpg")  # Mengembalikan JSON yang benar
     except Exception as e:
         return jsonify(success=False, message=str(e)), 500
 
@@ -165,7 +165,7 @@ def brightness_addition():
 def brightness_substraction():
     try:
         image_processing.brightness_substraction()
-        return jsonify(success=True, file_path="img/after.jpg")  # Mengembalikan JSON yang benar
+        return jsonify(success=True, file_path="img/image_now.jpg")  # Mengembalikan JSON yang benar
     except Exception as e:
         return jsonify(success=False, message=str(e)), 500
 
@@ -174,7 +174,7 @@ def brightness_substraction():
 def brightness_multiplication():
     try:
         image_processing.brightness_multiplication()
-        return jsonify(success=True, file_path="img/after.jpg")  # Mengembalikan JSON yang benar
+        return jsonify(success=True, file_path="img/image_now.jpg")  # Mengembalikan JSON yang benar
     except Exception as e:
         return jsonify(success=False, message=str(e)), 500
 
@@ -183,7 +183,7 @@ def brightness_multiplication():
 def brightness_division():
     try:
         image_processing.brightness_division()
-        return jsonify(success=True, file_path="img/after.jpg")  # Mengembalikan JSON yang benar
+        return jsonify(success=True, file_path="img/image_now.jpg")  # Mengembalikan JSON yang benar
     except Exception as e:
         return jsonify(success=False, message=str(e)), 500
 
@@ -192,7 +192,7 @@ def brightness_division():
 def histogram_equalizer():
     try:
         image_processing.histogram_equalizer()
-        return jsonify(success=True, file_path="img/after.jpg")  # Mengembalikan JSON yang benar
+        return jsonify(success=True, file_path="img/image_now.jpg")  # Mengembalikan JSON yang benar
     except Exception as e:
         return jsonify(success=False, message=str(e)), 500
 
@@ -238,11 +238,9 @@ def histogram_rgb():
 def thresholding():
     lower_thres = int(request.form['lower_thres'])
     upper_thres = int(request.form['upper_thres'])
-    try:
-        image_processing.threshold(lower_thres, upper_thres)
-        return jsonify(success=True, file_path="img/after.jpg")  # Mengembalikan JSON yang benar
-    except Exception as e:
-        return jsonify(success=False, message=str(e)), 500
+    image_processing.threshold(lower_thres, upper_thres)
+    return render_template("home.html", file_paths=["img/img_now.jpg"])  # Mengembalikan JSON yang benar
+
     
 
 @app.route("/dilasi", methods=["POST"])
@@ -263,6 +261,22 @@ def erosi():
         return jsonify(success=True, file_path="img/img_now.jpg")  # Mengembalikan JSON yang benar
     except Exception as e:
         return jsonify(success=False, message=str(e)), 500
+    
+@app.route("/closing", methods=["POST"])
+@nocache
+def closing():
+    try:
+        image_processing.closing()
+        return jsonify(success=True, file_path="img/img_now.jpg")  # Mengembalikan JSON yang benar
+    except Exception as e:
+        return jsonify(success=False, message=str(e)), 500
+
+@app.route("/counting", methods=["POST"])
+@nocache
+def counting():
+    jumlah_obj =  image_processing.counting()
+    return jsonify(success=True, file_path="img/img_now.jpg", jumlah_objek = jumlah_obj) 
+
     
 if __name__ == '__main__':
 
