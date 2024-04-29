@@ -128,7 +128,7 @@ def move_up():
     b = np.pad(b, ((0, 50), (0, 0)), 'constant')[50:, :]
     new_arr = np.dstack((r, g, b))
     new_img = Image.fromarray(new_arr)
-    new_img.save("static/img/after.jpg")
+    new_img.save("static/img/img_now.jpg")
 
 
 def move_down():
@@ -300,3 +300,43 @@ def threshold(lower_thres, upper_thres):
     img_arr[condition] = 255
     new_img = Image.fromarray(img_arr)
     new_img.save("static/img/after.jpg")
+
+def dilasi():
+    # Baca citra dalam skala GRAYSCALE
+    img = cv2.imread("static/img/img_now.jpg", cv2.IMREAD_GRAYSCALE)
+
+    # Konversi citra ke biner menggunakan threshold
+    _, binary_image = cv2.threshold(img, 70, 255, cv2.THRESH_BINARY)
+
+    # Definisikan ukuran kernel untuk dilasi
+    kernel_size = 3
+    kernel = np.ones((kernel_size, kernel_size), np.uint8)
+
+    # Lakukan dilasi pada citra biner
+    dilasi_img = cv2.dilate(binary_image, kernel, iterations=2)
+
+    # Konversi citra yang telah didilasi ke format PIL Image
+    new_img = Image.fromarray(dilasi_img)
+
+    # Simpan citra hasil dilasi
+    new_img.save("static/img/img_now.jpg")
+
+
+def erosi():
+    img = cv2.imread("static/img/img_now.jpg", cv2.IMREAD_GRAYSCALE)
+
+    # Konversi citra ke biner menggunakan threshold
+    _, binary_image = cv2.threshold(img, 70, 255, cv2.THRESH_BINARY)
+
+    # Definisikan ukuran kernel untuk dilasi
+    kernel_size = 3
+    kernel = np.ones((kernel_size, kernel_size), np.uint8)
+
+    # Lakukan dilasi pada citra biner
+    erosi_img = cv2.erode(binary_image, kernel, iterations=2)
+
+    # Konversi citra yang telah didilasi ke format PIL Image
+    new_img = Image.fromarray(erosi_img)
+
+    # Simpan citra hasil dilasi
+    new_img.save("static/img/img_now.jpg")

@@ -12,10 +12,22 @@ app = Flask(__name__)
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 
+img_directory = os.path.join(app.static_folder, 'img')
+
+def clear_image_directory():
+    for filename in os.listdir(img_directory):
+        file_path = os.path.join(img_directory, filename)
+        if os.path.isfile(file_path):
+            os.remove(file_path)
+
 
 def nocache(view):
     @wraps(view)
     def no_cache(*args, **kwargs):
+        # Hapus semua gambar di direktori img/ setiap kali halaman di-refresh
+        
+        
+        # Panggil fungsi tampilan (view)
         response = make_response(view(*args, **kwargs))
         response.headers['Last-Modified'] = datetime.now()
         response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
@@ -24,12 +36,15 @@ def nocache(view):
         return response
     return update_wrapper(no_cache, view)
 
+clear_image_directory()
+
 
 @app.route("/index")
 @app.route("/")
 @nocache
 def index():
-    return render_template("home.html", file_path="img/image_here.jpg")
+    clear_image_directory()
+    return render_template("home.html", file_path="img/image_now.jpg")
 
 
 @app.after_request
@@ -64,8 +79,8 @@ def upload():
 def normal():
     try:
         # Copy the current image to after.jpg to display as the "normal" image
-        copyfile(os.path.join(APP_ROOT, "static/img/img_now.jpg"), os.path.join(APP_ROOT, "static/img/after.jpg"))
-        return jsonify(success=True, file_path="img/after.jpg")
+        copyfile(os.path.join(APP_ROOT, "static/img/img_now.jpg"), os.path.join(APP_ROOT, "static/img/img_now.jpg"))
+        return jsonify(success=True, file_path="img/img_now.jpg")
     except Exception as e:
         return jsonify(success=False, message=str(e)), 500
 
@@ -228,6 +243,29 @@ def thresholding():
         return jsonify(success=True, file_path="img/after.jpg")  # Mengembalikan JSON yang benar
     except Exception as e:
         return jsonify(success=False, message=str(e)), 500
+    
 
+@app.route("/dilasi", methods=["POST"])
+@nocache
+def dilasi():
+    try:
+        image_processing.dilasi()
+        return jsonify(success=True, file_path="img/img_now.jpg")  # Mengembalikan JSON yang benar
+    except Exception as e:
+        return jsonify(success=False, message=str(e)), 500
+    
+
+@app.route("/erosi", methods=["POST"])
+@nocache
+def erosi():
+    try:
+        image_processing.erosi()
+        return jsonify(success=True, file_path="img/img_now.jpg")  # Mengembalikan JSON yang benar
+    except Exception as e:
+        return jsonify(success=False, message=str(e)), 500
+    
 if __name__ == '__main__':
+
+    clear_image_directory()
+
     app.run(debug=True, host="0.0.0.0")

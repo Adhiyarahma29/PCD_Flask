@@ -13,7 +13,6 @@
     <!-- Mengaitkan pustaka ikon Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-
     <script>
     document.addEventListener('DOMContentLoaded', function () {
         const uploadForm = document.getElementById('uploadForm');
@@ -48,7 +47,7 @@
                 .then(data => {
                     if (data.success) {
                         // Append timestamp to the source URL to prevent caching
-                        const newSrc = `{{ url_for('static', filename='img/after.jpg') }}?${new Date().getTime()}`;
+                        const newSrc = `{{ url_for('static', filename='img/img_now.jpg') }}?${new Date().getTime()}`;
                         document.getElementById('processedImage').src = newSrc;
                     } else {
                         alert('Failed to process image: ' + data.message);
@@ -152,9 +151,15 @@
                                 </div>
                             </form>
                         </li>
-                        
-                        
-                      
+                    </ul>
+                </details>
+
+                <details close >
+                    <summary><i class=""></i> QUIZ</summary>
+                    <ul>
+                        <li><a href="{{ url_for('dilasi') }}" class="process-btn"><i class="fas fa-sun"></i> Dilasi</a></li>
+                        <li><a href="{{ url_for('erosi') }}" class="process-btn"><i class="fas fa-sun"></i> Erosi</a></li>
+            
                     </ul>
                 </details>
                 
@@ -182,7 +187,7 @@
                 <div class="col-md-8 offset-md-2">
                     <div class="jumbotron">
                         <h3>After</h3>
-                        <img id="processedImage" class="img-fluid" src="{{ url_for('static', filename='') }}" alt="Processed image will appear here">
+                        <img id="processedImage" class="img-fluid" src="{{ url_for('static', filename='img/img_now.jpg') }}" alt="Processed image will appear here">
                     </div>
                 </div>
             </div>

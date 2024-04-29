@@ -10,6 +10,38 @@ body {
     background-color: #f0f0f0;
 }
 
+/* Tombol Upload Gambar */
+#uploadForm .btn-success {
+    background-color: #28a745;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#uploadForm .btn-success:hover {
+    background-color: #218838;
+}
+
+/* Tombol Pilih file */
+#inputGroupFile04 {
+    border: none;
+    background-color: #f8f9fa;
+    padding: 10px;
+    border-radius: 5px;
+    color: #495057;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#inputGroupFile04:hover {
+    background-color: #e2e6ea;
+}
+
 /* App layout */
 .app {
     display: flex;
