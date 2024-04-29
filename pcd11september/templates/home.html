@@ -14,54 +14,82 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const uploadForm = document.getElementById('uploadForm');
-        uploadForm.addEventListener('submit', function (event) {
-            event.preventDefault();
-            const formData = new FormData(uploadForm);
-            fetch("{{ url_for('upload') }}", {
-                method: 'POST',
-                body: formData,
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    document.getElementById('uploadedImage').src = "{{ url_for('static', filename='') }}" + data.file_path;
-                    document.getElementById('processedImage').src = "";  // Clear processed image if any
-                } else {
-                    alert('Failed to upload');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        });
-
-        document.querySelectorAll('.process-btn').forEach(button => {
-            button.addEventListener('click', function(event) {
+        document.addEventListener('DOMContentLoaded', function () {
+            const uploadForm = document.getElementById('uploadForm');
+            uploadForm.addEventListener('submit', function (event) {
                 event.preventDefault();
-                fetch(button.getAttribute('href'), {
+                const formData = new FormData(uploadForm);
+                fetch("{{ url_for('upload') }}", {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const uploadedImage = document.getElementById('uploadedImage');
+                        const processedImage = document.getElementById('processedImage');
+        
+                        uploadedImage.src = "{{ url_for('static', filename='') }}" + data.file_path;
+                        processedImage.src = ""; // Kosongkan gambar yang diproses jika ada
+        
+                    } else {
+                        alert('Gagal mengunggah gambar');
+                    }
+                })
+                .catch(error => {
+                    console.error('Terjadi kesalahan saat mengunggah gambar:', error);
+                });
+            });
+        
+            document.querySelectorAll('.process-btn').forEach(button => {
+                button.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    const href = button.getAttribute('href');
+        
+                    fetch(href, {
+                        method: 'POST'
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            const processedImage = document.getElementById('processedImage');
+                            
+                            // Menggabungkan URL dan timestamp untuk menghindari caching
+                            const newSrc = "{{ url_for('static', filename='img/img_now.jpg') }}" + `?${new Date().getTime()}`;
+                            
+                            processedImage.src = newSrc;
+                            fetchJumlahObjek(); // Panggil fungsi untuk mengupdate jumlah objek
+                        } else {
+                            alert('Gagal memproses gambar: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Terjadi kesalahan saat memproses gambar:', error);
+                    });
+                });
+            });
+        
+            function fetchJumlahObjek() {
+                fetch('/counting', {
                     method: 'POST'
                 })
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Append timestamp to the source URL to prevent caching
-                        const newSrc = `{{ url_for('static', filename='img/img_now.jpg') }}?${new Date().getTime()}`;
-                        document.getElementById('processedImage').src = newSrc;
+                        // Mengupdate elemen teks untuk menampilkan jumlah objek
+                        const jumlahObjekElem = document.getElementById('jumlah_objek');
+                        
+                        jumlahObjekElem.innerText = `Jumlah objek: ${data.jumlah_objek}`;
                     } else {
-                        alert('Failed to process image: ' + data.message);
+                        console.error('Gagal mengambil jumlah objek:', data.message);
                     }
                 })
                 .catch(error => {
-                    console.error('Error:', error);
+                    console.error('Terjadi kesalahan saat mengambil jumlah objek:', error);
                 });
-            });
+            }
         });
-    });
-</script>
-  
-    </script>
+        </script>
         
         
 </head>
@@ -200,38 +228,15 @@
                 </div>
             </div>
             <div class="row">
-                <!-- Kolom setengah halaman untuk jumbotron -->
                 <div class="col-md-8 offset-md-2">
                     <div class="jumbotron">
-                        <h3>After</h3>
+                        <h3>AFTER</h3>
                         <img id="processedImage" class="img-fluid" src="{{ url_for('static', filename='img/img_now.jpg') }}">
-                        <h2 id="jumlah_objek">Jumlah objek: -</h2>
+                        <!-- Perbarui untuk menggunakan elemen dengan id -->
+                        <h2 id="jumlah_objek" class="text-center">Jumlah objek: -</h2>
                     </div>
                 </div>
-            </div>
-            <script>
-                function fetchJumlahObjek() {
-                    // Panggil endpoint '/counting' menggunakan POST request
-                    fetch('/counting', {
-                        method: 'POST'
-                    })
-                    .then(response => response.json())  // Ambil respon sebagai JSON
-                    .then(data => {
-                        if (data.success) {
-                            // Perbarui elemen HTML dengan nilai jumlah_objek
-                            document.getElementById('jumlah_objek').innerText = `Jumlah objek: ${data.jumlah_objek}`;
-                        } else {
-                            console.error('Failed to fetch jumlah objek:', data.message);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    });
-                }
-            
-                // Panggil fungsi fetchJumlahObjek saat halaman dimuat
-                document.addEventListener('DOMContentLoaded', fetchJumlahObjek);
-                </script>
+            </div>            
         </main>
     </section>
     

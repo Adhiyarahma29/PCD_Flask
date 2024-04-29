@@ -271,11 +271,14 @@ def closing():
     except Exception as e:
         return jsonify(success=False, message=str(e)), 500
 
+
 @app.route("/counting", methods=["POST"])
 @nocache
 def counting():
-    jumlah_obj =  image_processing.counting()
-    return jsonify(success=True, file_path="img/img_now.jpg", jumlah_objek = jumlah_obj) 
+
+        # Panggil fungsi untuk menghitung jumlah objek
+    jumlah_obj = image_processing.counting()
+    return jsonify(success=True,file_path="img/img_now.jpg", jumlah_objek =jumlah_obj)
 
     
 if __name__ == '__main__':
