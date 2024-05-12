@@ -1,0 +1,21 @@
+Nama Anggota :
+- Adhiya Rahma Anzani
+- Danendra Gafrila
+- Muhammad Faisal Adha
+
+CARA PENGGUNAAN
+
+1. Dilasi, Erosi, Opening, Closing
+	- run program "flask run"
+	- masuk ke localhost yang sudah terlampir
+	- upload gambar yang ingin digunakan
+	- masuk ke menu morfologi dan pilih fitur mana yang akan digunakan
+	- dan hasilnya akan ditampilkan di bawah gambar upload
+
+2. Counting objek untuk gambar hitung1 dan hitung4
+	- untuk penggunaanya tidak jauh berbeda dari sebelumnya namun yang dibeadakan adalah
+untuk menghitung objek pada benda ini saya menggunakan dilasi sebanyak 1 kali dan erosi 2 kali dan nanti akan di beri kontur untuk menghitung setiap objek yang ada di konturnya.
+
+3. counting objek untuk gambar pecahan kaca
+	- untuk penggunaanya tidak jauh berbeda dari sebelumnya namun yang dibeadakan adalah
+untuk menghitung objek pada benda ini saya menggunakan dilasi sebanyak 1 kali dan erosi 2 kali dan nanti akan di beri kontur untuk menghitung setiap objek yang ada di konturnya.
